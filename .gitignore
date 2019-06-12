@@ -1,0 +1,11 @@
+.idea/
+.pyc
+*.egg-info
+*.so
+*.tar.gz
+*.DS_Store
+*.bin
+*.vec
+.ipynb_checkpoints/
+__pycache__
+*.ipynb
