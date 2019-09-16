@@ -117,3 +117,8 @@ def load_data(path='imdb.npz',
     y_test = np.array(labels[len(x_train):])
 
     return (x_train, y_train), (x_test, y_test)
+
+
+def load_data_ngram():
+    return (['Access the notebooks in the notebooks directory in this repo',
+            'You can run these notebook on Google Colab (recommended) or on your local machine']*20, [1, 0]*20),(['Rename this new notebook by removing the Copy of part in the title'], [1])
