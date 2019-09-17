@@ -2,9 +2,11 @@
 # @Date    : 2019/9/17
 # @Author  : mingming.xu
 # @File    : han.py
+
 '''
 https://www.aclweb.org/anthology/N16-1174
 '''
+
 
 import tensorflow as tf
 from tensorflow import keras

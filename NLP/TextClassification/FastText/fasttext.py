@@ -2,6 +2,12 @@
 # @Date    : 2019/9/12
 # @Author  : mingming.xu
 # @File    : fasttext.py
+
+''''
+https://arxiv.org/abs/1607.01759
+'''
+
+
 import tensorflow as tf
 from tensorflow import keras
 from keras.layers import Input, Embedding, GlobalAveragePooling1D, Dense

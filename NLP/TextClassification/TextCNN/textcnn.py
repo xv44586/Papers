@@ -2,6 +2,12 @@
 # @Date    : 2019/9/16
 # @Author  : mingming.xu
 # @File    : TextCNN.py
+
+'''
+https://www.aclweb.org/anthology/D14-1181
+'''
+
+
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import Input, Model

@@ -2,6 +2,12 @@
 # @Date    : 2019/9/12
 # @Author  : mingming.xu
 # @File    : rcnn.py
+
+'''
+http://ir.ia.ac.cn/handle/173211/11477
+'''
+
+
 import tensorflow as tf
 from tensorflow import keras
 from keras.layers import Dense, Input, Embedding, LSTM, concatenate, Lambda, Conv1D, GlobalMaxPool1D
