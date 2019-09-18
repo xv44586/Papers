@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 # @Date    : 2019/9/17
 # @Author  : mingming.xu
-# @File    : han.py
+# @File    : text_birnn_att.py
+
+'''
+https://www.aclweb.org/anthology/P16-2034
+'''
 
 
 import tensorflow as tf

@@ -56,7 +56,7 @@ class Attention(Layer):
     def call(self, x, mask=None):
         features_dim = self.features_dim
         step_dim = self.step_dim
-
+        # (B, T, D) -> (B, T)
         wh = K.reshape(K.dot(K.reshape(x, (-1, features_dim)), K.reshape(self.W, (features_dim, 1))), (-1, step_dim))
         if self.bias:
             wh += self.b
