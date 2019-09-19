@@ -20,7 +20,8 @@ max_features = 5000
 maxlen = 400
 emb_dim = 128
 
-repeat_num = 6
+# dp layer num
+repeat_num = 3
 
 batch_size = 128
 epochs = 5

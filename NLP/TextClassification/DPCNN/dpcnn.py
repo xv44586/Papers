@@ -53,19 +53,19 @@ class DPCNN(object):
         for i in range(repeat_num):
             # first layer
             if i == 0:
-                block = self.ResCon(emb)
+                block = self.TvBlock(emb)
                 res_block = Add()([pre_activation, block])
                 block = MaxPooling1D(pool_size=self.pool_size, strides=self.pool_stride)(res_block)
             # last layer
             elif i == repeat_num - 1:
-                block_last = self.ResCon(block)
+                block_last = self.TvBlock(block)
                 res_block = Add()([block, block_last])
                 block = GlobalMaxPooling1D()(res_block)
                 break
 
             # middle layer
             else:
-                block_mid = self.ResCon(block)
+                block_mid = self.TvBlock(block)
                 res_block = Add()([block_mid, block])
                 block = MaxPooling1D(pool_size=self.pool_size, strides=self.pool_stride)(res_block)
 
@@ -78,7 +78,7 @@ class DPCNN(object):
         model.summary()
         return model
 
-    def ResCon(self, input_):
+    def TvBlock(self, input_):
         '''
         two views
         '''
@@ -94,7 +94,7 @@ class DPCNN(object):
                        strides=self.conv_stride,
                        padding='same',
                        activation=self.conv_activation)(x)
-        x = BatchNormalization()(x)
+        x = BatchNormalization()(con_2)
         # per-activation, activation in paper is relu
         x = PReLU()(x)
         return x
