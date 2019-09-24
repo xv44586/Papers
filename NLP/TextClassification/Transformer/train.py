@@ -6,12 +6,8 @@
 
 import logging
 
-import keras
-from keras import backend as K
 from keras.datasets import imdb
 from keras.preprocessing import sequence
-from keras import Input, Model
-from keras.layers import *
 
 from load_data import load_data
 from transformer import Transformer
@@ -21,8 +17,8 @@ logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
 # config
-maxlen = 400
-max_features = 500
+maxlen = 80
+max_features = 20000
 emb_dim = 125
 batch_size = 125
 epochs = 5
