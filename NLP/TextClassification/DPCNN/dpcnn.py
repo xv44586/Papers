@@ -31,10 +31,10 @@ class DPCNN(object):
         self.pool_size = 3
         self.pool_stride = 2
 
-        self.sp_dropout = 0.2
+        self.sp_dropout = 0.3
 
         self.dense_units = 100
-        self.dropout = 0.2
+        self.dropout = 0.5
 
     def build_model(self):
         input_ = Input((self.maxlen,))
