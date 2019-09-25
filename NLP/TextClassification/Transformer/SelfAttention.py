@@ -121,3 +121,46 @@ class SelfAttention(Layer):
             return input_shape[0][0], input_shape[0][1], self.out_dim
         else:
             return input_shape[0], input_shape[1], self.out_dim
+
+
+class TrainablePositionEmbedding(Layer):
+    def __init__(self, maxlen, p_dim, mode='add', **kwargs):
+        super(TrainablePositionEmbedding, self).__init__(**kwargs)
+        self.maxlen = maxlen  # seq length
+        self.p_dim = p_dim  # embedding dimension
+        self.mode = mode  # add if 'add' else concatenate
+
+    def build(self, input_shape):
+        super(TrainablePositionEmbedding, self).build(input_shape)
+        self.p_embeddings = self.add_weight(
+            shape=(self.maxlen, self.p_dim),
+            initializer='zero',
+            name='position_embedding'
+        )
+
+    def call(self, inputs, **kwargs):
+        # allow input current position
+        if isinstance(inputs, list):
+            x, cp = inputs
+        else:
+            x = inputs
+            cp = 0
+
+        pind = K.arange(K.shape(x)[1])  # position indices
+        pind = K.expand_dims(pind, 0)  # add col axis
+        pind = K.tile(pind, (K.shape(x)[0], 1))  # expand to batch size
+        pind = K.abs(K.cast(pind - cp, 'int32'))  # start from current position
+        pemb = K.gather(self.p_embeddings, pind)
+
+        if self.mode == 'add':
+            return x + pemb
+
+        return K.concatenate([x, pemb], -1)
+
+    def compute_output_shape(self, input_shape):
+        if self.mode == 'add':
+            return input_shape
+
+        return input_shape[0], input_shape[1], input_shape[2] + self.p_dim
+
+
