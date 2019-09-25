@@ -146,7 +146,7 @@ class TrainablePositionEmbedding(Layer):
             x = inputs
             cp = 0
 
-        pind = K.arange(K.shape(x)[1])  # position indices
+        pind = K.arange(0, K.shape(x)[1])  # position indices
         pind = K.expand_dims(pind, 0)  # add col axis
         pind = K.tile(pind, (K.shape(x)[0], 1))  # expand to batch size
         pind = K.abs(K.cast(pind - cp, 'int32'))  # start from current position
@@ -164,3 +164,47 @@ class TrainablePositionEmbedding(Layer):
         return input_shape[0], input_shape[1], input_shape[2] + self.p_dim
 
 
+class SinCosPositionEncoder(Layer):
+    def __init__(self, p_dim, mode='add', **kwargs):
+        super(SinCosPositionEncoder, self).__init__(**kwargs)
+        self.p_dim = p_dim  # position embedding dimensioin
+        self.mode = mode  # mode : add or concatenate
+        assert self.p_dim % 2 == 0
+
+    def build(self, input_shape):
+        super(SinCosPositionEncoder, self).build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        # allow current position
+        if isinstance(inputs, list):
+            x, cp = inputs
+        else:
+            x, cp = inputs, 0
+
+        pind = K.arange(0, K.shape(x)[1])  # position indices
+        pind = K.expand_dims(pind, 0)
+        pind = K.tile(pind, [K.shape(x)[0], 1])
+        pind = K.abs(K.cast(pind - cp, 'int32'))
+        p_emb = self.in2encoder(pind)
+        if self.mode == 'add':
+            return p_emb + x
+
+        return K.concatenate([x, p_emb], -1)
+
+    def in2encoder(self, pos_ind):
+        pe = K.pow(2., 2. * K.arange(0, self.p_dim // 2, dtype='float32') / self.p_dim)
+        pe = K.expand_dims(pe, 0)
+        pos_ind = K.expand_dims(pos_ind, -1)
+        pos_ind = K.cast(pos_ind, 'float32')
+        pe = K.dot(pos_ind, pe)
+        ps, pc = K.sin(pe), K.cos(pe)
+        ps = K.expand_dims(ps, -1)  # add last axis to intersect tow vector into one
+        pc = K.expand_dims(pc, -1)
+        PE = K.concatenate([ps, pc], -1)
+        return K.reshape(PE, (K.shape(PE)[0], K.shape(PE)[1], self.p_dim))
+
+    def compute_output_shape(self, input_shape):
+        if self.mode == 'add':
+            return input_shape
+
+        return input_shape[0], input_shape[1], input_shape[2] + self.p_dim

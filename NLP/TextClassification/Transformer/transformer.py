@@ -27,6 +27,8 @@ class Transformer(object):
     def build(self):
         input_ = Input((self.maxlen,))
         embedding = Embedding(self.max_features, self.emb_dim, input_length=self.maxlen)(input_)
+        # embedding = TrainablePositionEmbedding(self.maxlen, self.emb_dim)(embedding)
+        embedding = SinCosPositionEncoder(self.emb_dim)(embedding)
         att = SelfAttention(headers=self.headers, value_size=self.value_size, key_size=self.key_size)(
             embedding)
         # attention loop

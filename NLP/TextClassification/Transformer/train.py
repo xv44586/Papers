@@ -19,7 +19,7 @@ logger.addHandler(logging.StreamHandler())
 # config
 maxlen = 80
 max_features = 20000
-emb_dim = 125
+emb_dim = 126
 batch_size = 125
 epochs = 5
 
@@ -45,6 +45,6 @@ model.compile('adam', 'binary_crossentropy', ['acc'])
 model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, validation_data=[x_test, y_test])
 
 logger.info('test...')
-pred = model.predict(x_test)
-logger.info(pred[:10])
+pred = model.predict(x_test[:10])
+logger.info(pred)
 logger.info(y_test[:10])
