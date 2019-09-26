@@ -4,6 +4,10 @@
 # @File    : transformer.py
 
 
+'''
+https://arxiv.org/pdf/1706.03762.pdf?
+'''
+
 from keras import Input, Model
 from keras.layers import *
 
