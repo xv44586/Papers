@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 # config
-maxlen = 400
+maxlen = 40
 max_features = 500
 emb_dim = 125
 batch_size = 125
@@ -44,3 +44,7 @@ earlystop = EarlyStopping(patience=3, mode='max', monitor='val_acc')
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc'])
 model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, callbacks=[earlystop],
           validation_data=(x_test, y_test))
+
+logger.info('test...')
+pred = model.predict(x_test[:10])
+logger.info(list(zip(pred, y_test[:10])))
